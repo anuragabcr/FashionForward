@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import ModalProvider from "@/providers/modal-provider";
+import { Toaster } from "react-hot-toast";
 
 const font = Urbanist({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <ModalProvider />
+        <Toaster />
         <Navbar />
         {children}
         <Footer />
