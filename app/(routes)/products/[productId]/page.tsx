@@ -4,6 +4,8 @@ import Gallery from "@/components/Gallery";
 import Info from "@/components/Info";
 import ProductList from "@/components/ProductList";
 
+export const revalidate = 0;
+
 interface ProductPageProps {
   params: {
     productId: string;

@@ -9,6 +9,8 @@ import NoResults from "@/components/NoResults";
 import ProductCard from "@/components/ProductCard";
 import MobileFilter from "./components/MobileFilter";
 
+export const revalidate = 0;
+
 interface CategoryPageProps {
   params: {
     categoryId: string;
