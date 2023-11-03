@@ -2,15 +2,19 @@
 
 import axios from "axios";
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Button from "@/components/Button";
 import Currency from "@/components/Currency";
 import useCart from "@/hooks/use-cart";
 import { toast } from "react-hot-toast";
+import { useAuth } from "@clerk/nextjs";
 
 const Summary = () => {
+  const { userId } = useAuth();
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const cart = useCart();
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
 
@@ -28,6 +32,19 @@ const Summary = () => {
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.price);
   }, 0);
+
+  const onPlaceorde = async () => {
+    if (!userId) return router.push("/sign-in");
+
+    const response = await axios.post("/api/orders", {
+      products: items,
+      userId,
+    });
+    if (response.status == 200) {
+      toast.success("Order placed successfully");
+      cart.removeAll();
+    } else toast.error("Order Failed");
+  };
 
   const onCheckout = async () => {
     const response = await axios.post(
@@ -56,6 +73,13 @@ const Summary = () => {
         className="w-full mt-6"
       >
         Checkout
+      </Button>
+      <Button
+        onClick={onPlaceorde}
+        disabled={items.length === 0}
+        className="w-full mt-6"
+      >
+        Place order
       </Button>
     </div>
   );
